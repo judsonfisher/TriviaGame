@@ -1,0 +1,37 @@
+body {
+	background-image: url("../images/congruent_outline.png");
+}
+
+.container {
+	margin-top: 30px;
+	margin-bottom: 30px;
+	background-color: #700353;
+	height: 600px
+}
+
+div {
+	padding: 5px;
+}
+
+button {
+	width: 30%;
+	border: 2px blue dotted;
+	height: 50px;
+	margin-left: 35%;
+	margin-left: 35%;
+	margin-top: 15%;
+}
+
+h1, h2, h3 {
+	color: white;
+	text-align: center;
+}
+
+hr {
+	width: 70%;
+}
+
+h3:hover {
+	background-color: blue;
+	cursor: pointer; cursor: hand;
+}
