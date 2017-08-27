@@ -1,7 +1,15 @@
 $( document ).ready(function() {
 
-// Insert "Start Game" functionality (hides div of regular content until Start is clicked)
-// Insert question data onto page, begin countdown
+var timer = 5;
+
+var score = 0;
+
+var intervalID;
+
+var clockRunning = false;
+
+// Run function beginning game
+// Start button appears in front of users
 
 $(".start").show();
 $(".questions").hide();
@@ -9,82 +17,118 @@ $(".questions").hide();
 $("#start").click(function(){
 	$(".start").hide();
     $(".questions").show();
-    populate(question1);
+    // Include function to load questions
+    loadQuestion();
 });
 
-// Create variables (score, time)
+var questions = {
 
-var timer = 30;
+	question1: {
+		script: "Which car company created the model nicknamed 'Gullwing'?",
+		option1: "Fiat",
+		option2: "Mercedes Benz",
+		option3: "Ferrari",
+		option4: "Porsche",
+		answer: "Mercedes Benz",
+		feedbackRight: "Correct! The answer was Mercedes Benz",
+		feedbackWrong: "Incorrect. The answer was Mercedes Benz"
+	},
 
-var score = 0;
+	question2: {
+		script: "Which brand is James Bond known for driving?",
+		option1: "Porsche",
+		option2: "Jaguar",
+		option3: "Bentley",
+		option4: "Aston Martin",
+		answer: "Aston Martin",
+		feedbackRight: "Correct! The answer was Aston Martin",
+		feedbackWrong: "Incorrect. The answer was Aston Martin"
+	},
 
-// Create foundational questions and functions
-var question1 = {
-	question: "Which car company created the model nicknamed 'Gullwing'?",
-	option1: "Fiat",
-	option2: "Mercedes Benz",
-	option3: "Ferrari",
-	option4: "Porsche",
-	// correct: question1.option2,
-}
+	question3: {
+		script: "Which of the following is the best selling model in the U.S.?",
+		option1: "Ford F-150",
+		option2: "Toyota Corolla",
+		option3: "Volkswagen Jetta",
+		option4: "Chevy Tahoe",
+		answer: "Ford F-150",
+		feedbackRight: "Correct! The answer was the Ford F-150",
+		feedbackWrong: "Incorrect. The answer was the Ford F-150"
+	},
 
-var question2 = {
-	question: "Which brand is James Bond known for driving?",
-	option1: "Porsche",
-	option2: "Jaguar",
-	option3: "Bentley",
-	option4: "Aston Martin",
-	// correct: question2.option4,
-}
+	question4: {
+		script: "Which car model is referenced most often in rap songs?",
+		option1: "Rolls Royce Phantom",
+		option2: "Cadillac Escalade",
+		option3: "Bugatti Veyron",
+		option4: "Range Rover Sport",
+		answer: "Cadillac Escalade",
+		feedbackRight: "Correct! The answer was the Cadillac Escalade",
+		feedbackWrong: "Incorrect. The answer was the Cadillac Escalade"
+	},
+};
 
-var question3 = {
-	question: "Which of the following is the best selling model in the U.S.?",
-	option1: "Ford F-150",
-	option2: "Toyota Corolla",
-	option3: "Volkswagen Jetta",
-	option4: "Chevy Tahoe",
-	// correct: question3.option1,
-}
+// Random question is selected from an array
 
-var question4 = {
-	question: "Which car model is referenced most often in rap songs?",
-	option1: "Rolls Royce Phantom",
-	option2: "Cadillac Escalade",
-	option3: "Bugatti Veyron",
-	option4: "Range Rover Sport",
-	// correct: question4.option2,
-}
+var questionOptions = [questions.question1, questions.question2, questions.question3, questions.question4];
+var questionUsed = questionOptions[Math.floor(Math.random() * questionOptions.length)];
 
-// unsure if this is useful.. var questionOrder = [question1, question2, question3, question4];
+console.log(questionUsed);
 
-function populate(x) {
-	$("#question").html(x.question);
-	$("#option1").html(x.option1);
-	$("#option2").html(x.option2);
-	$("#option3").html(x.option3);
-	$("#option4").html(x.option4);
-	countdown();
-}
+// First question and answers are loaded
 
-function countdown() { // This shit needs tweaking
-	timer = 30;
+function timeUp() { // NOT WORKING
+	setInterval(function() {timer = 0; $("#countdown").html(timer); });
+	$("#question").html("Time Up! YOU LOSE");
+	$("#option1").html(questionUsed.feedbackWrong);
+	$("#option2").html("");
+	$("#option3").html("");
+	$("#option4").html("");
+
+	setTimeout(nextQuestion, 3000);
+};
+
+function loadQuestion() {
+	timer = 5;
+	setInterval(function() {timer--; $("#countdown").html(timer); }, 1000);
+	setTimeout(timeUp, 5000);
+
 	$("#countdown").html(timer);
-	setTimeout(function(){ 
-		timer--;
-		$("#countdown").html(timer);
-		console.log(timer);
-	}, 1000);
+	$("#question").html(questionUsed.script);
+	$("#option1").html(questionUsed.option1);
+	$("#option2").html(questionUsed.option2);
+	$("#option3").html(questionUsed.option3);
+	$("#option4").html(questionUsed.option4);
+};
+
+function nextQuestion() {
+	var indexQ = questionOptions.indexOf(questionUsed);
+	questionOptions.splice(indexQ, 1);
+	questionUsed = questionOptions[Math.floor(Math.random() * questionOptions.length)];
+	loadQuestion();
 }
 
-// Insert "Start Game" functionality (hides div of regular content until Start is clicked)
-// Insert question data onto page, begin countdown
-
-// Link correct answer to options within objects
-
-// On the final screen, show the number of correct answers, incorrect answers, and an option to restart the game (without reloading the page).
 
 
+// User selects choice and is directed to answer for 3 seconds, stops clock
 
+// Clock rests and new question is loaded
+
+// If clock hits zero, user is out of time and is given feedback
+
+//Feedback slide shows responses and then gives reset option
 
 
 });
+
+
+
+
+
+// for later?
+
+// setTimeout(function(){ 
+		// 	if (timer === 0) {
+		// 	$("#option1").html("you lose");
+		// };
+		// }, 30000);
