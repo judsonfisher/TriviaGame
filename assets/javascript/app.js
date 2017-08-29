@@ -1,12 +1,20 @@
 $( document ).ready(function() {
 
-var timer = 5;
+var timer = 60;
 
 var score = 0;
 
-var intervalID;
-
 var clockRunning = false;
+
+var questionLoaded = false;
+
+var answer1 = '<h3 id="option2">Mercedes Benz</h3>';
+
+var answer2 = '<h3 id="option4">Aston Martin</h3>';
+
+var answer3 = '<h3 id="option1">Ford F-150</h3>';
+
+var answer4 = '<h3 id="option2">Cadillac Escalade</h3>';
 
 // Run function beginning game
 // Start button appears in front of users
@@ -17,7 +25,9 @@ $(".questions").hide();
 $("#start").click(function(){
 	$(".start").hide();
     $(".questions").show();
-    // Include function to load questions
+    $("#countdown").html(timer);
+    var intervalID = setInterval(function() {timer--; $("#countdown").html(timer);}, 1000);
+    setTimeout(timeUp, 60000);
     loadQuestion();
 });
 
@@ -73,25 +83,27 @@ var questions = {
 var questionOptions = [questions.question1, questions.question2, questions.question3, questions.question4];
 var questionUsed = questionOptions[Math.floor(Math.random() * questionOptions.length)];
 
-console.log(questionUsed);
-
 // First question and answers are loaded
+// If clock hits zero, user is out of time and is given feedback
 
 function timeUp() { // NOT WORKING
-	setInterval(function() {timer = 0; $("#countdown").html(timer); });
-	$("#question").html("Time Up! YOU LOSE");
-	$("#option1").html(questionUsed.feedbackWrong);
+	questionLoaded = false; // may not be necessary
+
+	$("#question").html("Time Up! Game over");
+	$("#countdown").html(0);
+	timer = undefined;
+	clearInterval(setTimeout);
+	$("#option1").html("");
 	$("#option2").html("");
 	$("#option3").html("");
 	$("#option4").html("");
 
-	setTimeout(nextQuestion, 3000);
 };
 
 function loadQuestion() {
-	timer = 5;
-	setInterval(function() {timer--; $("#countdown").html(timer); }, 1000);
-	setTimeout(timeUp, 5000);
+	questionLoaded = true;  
+
+	console.log(questionUsed.answer);
 
 	$("#countdown").html(timer);
 	$("#question").html(questionUsed.script);
@@ -99,20 +111,75 @@ function loadQuestion() {
 	$("#option2").html(questionUsed.option2);
 	$("#option3").html(questionUsed.option3);
 	$("#option4").html(questionUsed.option4);
+
+	$("#option1, #option2, #option3, #option4").on('click', function() {
+		var selection = $(this).text();	
+		console.log(selection);
+		console.log(questionUsed.answer);
+		if (selection == questionUsed.answer) {
+			correct();
+			// questionUsed.answer || answer1 || answer2 || answer3 || answer4) {
+		} else {
+			incorrect();		
+		};
+	});
+
 };
+
+function correct() {
+	questionLoaded = false; // may not be necessary
+
+	$("#question").html("Score!");
+	$("#option1").html(questionUsed.feedbackRight);
+	$("#option2").html("");
+	$("#option3").html("");
+	$("#option4").html("");
+	$("#score").html(score += 1);
+
+	setTimeout(nextQuestion, 3000);
+};
+
+function incorrect() {
+	questionLoaded = false; // may not be necessary
+
+	$("#question").html("Nope!");
+	$("#option1").html(questionUsed.feedbackWrong);
+	$("#option2").html("");
+	$("#option3").html("");
+	$("#option4").html("");
+	$("#score").html(score);
+
+	setTimeout(nextQuestion, 3000);
+};
+
+function gameOver() {
+	questionLoaded = false; // may not be necessary
+
+	$("#question").html("Game Over!");
+	$("#option1").html("");
+	$("#option2").html("");
+	$("#option3").html("");
+	$("#option4").html("");
+	$("#score").html("Your final score: " + score);
+
+	setTimeout(nextQuestion, 3000);
+};
+
+// Clock resets and new question is loaded
 
 function nextQuestion() {
 	var indexQ = questionOptions.indexOf(questionUsed);
 	questionOptions.splice(indexQ, 1);
 	questionUsed = questionOptions[Math.floor(Math.random() * questionOptions.length)];
+	console.log(questionOptions);
+	if (questionOptions.length === 0) {
+		gameOver();
+	} else {
 	loadQuestion();
-}
-
-
+};
+};
 
 // User selects choice and is directed to answer for 3 seconds, stops clock
-
-// Clock rests and new question is loaded
 
 // If clock hits zero, user is out of time and is given feedback
 
@@ -120,15 +187,3 @@ function nextQuestion() {
 
 
 });
-
-
-
-
-
-// for later?
-
-// setTimeout(function(){ 
-		// 	if (timer === 0) {
-		// 	$("#option1").html("you lose");
-		// };
-		// }, 30000);
