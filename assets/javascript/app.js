@@ -1,3 +1,5 @@
+// Load jQuery 
+
 $( document ).ready(function() {
 
 var timer = 60;
@@ -7,6 +9,8 @@ var score = 0;
 var clockRunning = false;
 
 var questionLoaded = false;
+
+// Link answers to selections
 
 var answer1 = '<h3 id="option2">Mercedes Benz</h3>';
 
@@ -30,6 +34,8 @@ $("#start").click(function(){
     setTimeout(timeUp, 60000);
     loadQuestion();
 });
+
+// Questions and corresponding themes
 
 var questions = {
 
@@ -181,3 +187,7 @@ function nextQuestion() {
 };
 
 });
+
+// Questions are not logging as correct after first selection
+// Not running through each question in array
+// Cause and solution for errors are unknown
