@@ -116,15 +116,16 @@ function loadQuestion() {
 		var selection = $(this).text();	
 		console.log(selection);
 		console.log(questionUsed.answer);
-		if (selection == questionUsed.answer) {
+		if (selection === questionUsed.answer) {
 			correct();
-			// questionUsed.answer || answer1 || answer2 || answer3 || answer4) {
-		} else {
-			incorrect();		
+		} else if (selection !== questionUsed.answer) {
+			incorrect();
 		};
 	});
 
 };
+
+// User selects choice and is directed to answer for 3 seconds
 
 function correct() {
 	questionLoaded = false; // may not be necessary
@@ -135,7 +136,6 @@ function correct() {
 	$("#option3").html("");
 	$("#option4").html("");
 	$("#score").html(score += 1);
-
 	setTimeout(nextQuestion, 3000);
 };
 
@@ -148,9 +148,10 @@ function incorrect() {
 	$("#option3").html("");
 	$("#option4").html("");
 	$("#score").html(score);
-
 	setTimeout(nextQuestion, 3000);
 };
+
+//Feedback slide shows responses and then gives reset option
 
 function gameOver() {
 	questionLoaded = false; // may not be necessary
@@ -175,15 +176,8 @@ function nextQuestion() {
 	if (questionOptions.length === 0) {
 		gameOver();
 	} else {
-	loadQuestion();
+		loadQuestion();
+	};
 };
-};
-
-// User selects choice and is directed to answer for 3 seconds, stops clock
-
-// If clock hits zero, user is out of time and is given feedback
-
-//Feedback slide shows responses and then gives reset option
-
 
 });
